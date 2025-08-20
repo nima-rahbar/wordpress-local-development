@@ -1,0 +1,189 @@
+# How to Add a New WordPress Site
+
+This document will guide you through the process of adding a new WordPress site to this environment.
+
+## Prerequisites
+
+Before you begin, make sure you have the following software installed on your machine:
+
+- Docker
+- Docker Compose
+- WordPress core folder (inside `wp-template` folder)
+
+## 1. First-Time Setup: Nginx Proxy Manager & Global Adminer
+
+If you are setting up this environment for the first time, you need to start the Nginx Proxy Manager and the Global Adminer.
+
+1.  **Create the proxy network**:
+
+    ```bash
+    docker network create proxy-network
+    ```
+
+2.  **Start the Nginx Proxy Manager**:
+
+    ```bash
+    cd nginx-proxy-manager
+    docker-compose up -d
+    ```
+
+3.  **Access the Nginx Proxy Manager UI**:
+
+    Open your web browser and navigate to `http://localhost:81`.
+
+    The default credentials are:
+
+    - **Email**: `admin@example.com`
+    - **Password**: `changeme`
+
+    You will be prompted to change these credentials after your first login.
+
+4.  **Start the Global Adminer**:
+
+    ```bash
+    cd adminer
+    docker-compose up -d
+    ```
+
+5.  **Access the Global Adminer UI**:
+
+    Open your web browser and navigate to `http://localhost:8080`.
+
+    To connect to a site's database, use the database container name as the "Server" (e.g., `db_my-awesome-site`). The username and password are those you set during site creation.
+
+## 2. Creating a New Site
+
+To create a new WordPress site, use the `create-site.sh` script. This script will guide you through the process, including setting up the host entry automatically.
+
+```bash
+./create-site.sh
+```
+
+The script will prompt you for:
+
+- Site Name
+- Domain TLD (default: `local`)
+- Database Prefix (default: `wp_`)
+- Plugins (space-separated list, e.g., `woocommerce elementor`)
+- Memcached (y/n, default: `n`)
+- PHP Memory Limit (default: `256M`)
+- PHP Max Upload Filesize (default: `64M`)
+- WordPress Debug Mode (y/n, default: `n`)
+- Adminer Port (default: `8080` - _Note: This is for individual site Adminer, which is no longer used. You can keep the default._)
+- Database User (default: `wordpress`)
+- Database Password (default: `wordpress`)
+- Database Name (default: `wordpress`)
+
+This command will create a new directory named `my-awesome-site` with a full WordPress installation in a `wordpress` subdirectory.
+
+## 3. Starting the Site
+
+Once you have created the site, you need to start it.
+
+```bash
+cd <site-name>
+docker-compose up -d
+```
+
+### Example
+
+```bash
+cd my-awesome-site
+docker-compose up -d
+```
+
+This will start the WordPress, database, and other services for your site.
+
+## 4. Configuring Nginx Proxy Manager
+
+The final step is to configure the Nginx Proxy Manager to route traffic to your new site.
+
+1.  **Log in to the Nginx Proxy Manager UI** at `http://localhost:81`.
+
+2.  **Go to `Hosts` > `Proxy Hosts`** and click `Add Proxy Host`..
+
+3.  **Fill in the form**:
+
+    - **Domain Names**: The full domain of your site (e.g., `my-awesome-site.local`).
+    - **Scheme**: `http`
+    - **Forward Hostname / IP**: The name of your WordPress container. By default, it is `wp_<site-name>` (e.g., `wp_my-awesome-site`).
+    - **Forward Port**: `80`
+
+4.  **Click `Save`**.
+
+You should now be able to access your new WordPress site in your browser at the domain you configured (e.g., `http://my-awesome-site.local`).
+
+## 5. Running WP-CLI Commands
+
+To run `wp-cli` commands for your site (e.g., to install plugins, manage users, etc.), you can execute them directly inside the running WordPress container.
+
+1.  **Find your WordPress container name**:
+
+    ```bash
+    docker ps
+    ```
+
+    Look for the container with the `NAMES` like `wp_your-site-name`.
+
+2.  **Execute `wp-cli` commands**:
+    ```bash
+    docker exec -it wp_your-site-name wp <command>
+    ```
+    Replace `wp_your-site-name` with your actual WordPress container name and `<command>` with the `wp-cli` command you want to run.
+
+### Example: Install and Activate a Plugin
+
+```bash
+docker exec -it wp_my-awesome-site wp plugin install updraftplus --activate
+```
+
+## 6. Managing Sites
+
+Once your site is created and running, you can manage its lifecycle using `docker-compose` commands.
+
+### Restarting a Site
+
+To restart all services for a specific site:
+
+```bash
+cd <site-name>
+docker-compose restart
+```
+
+### Stopping a Site
+
+To stop all services for a specific site without removing them:
+
+```bash
+cd <site-name>
+docker-compose stop
+```
+
+### Deleting a Site (Containers Only)
+
+To stop and remove only the containers and networks associated with a specific site (keeping the database data and site files):
+
+```bash
+cd <site-name>
+docker-compose down
+```
+
+### Fully Deleting a Site (Containers, Volumes, and Files)
+
+To completely remove a site, including its containers, Docker volumes (which store database data), and all site files:
+
+1.  **Stop and remove containers and volumes**:
+
+    ```bash
+    cd <site-name>
+    docker-compose down --volumes
+    ```
+
+2.  **Delete the site directory**:
+
+    ```bash
+    cd ..
+    rm -rf <site-name>
+    ```
+
+    **Warning**: This action is irreversible and will permanently delete all your site's files and database data.
