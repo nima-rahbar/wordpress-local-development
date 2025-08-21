@@ -49,7 +49,29 @@ If you are setting up this environment for the first time, you need to start the
 
     Open your web browser and navigate to `http://localhost:8080`.
 
-    To connect to a site's database, use the database container name as the "Server" (e.g., `db_my-awesome-site`). The username and password are those you set during site creation.
+    To connect to a site's database, you need to provide the correct credentials in the Adminer login form.
+
+    ### Login Details
+
+    - **System**: `MySQL` (or `MariaDB`)
+    - **Server**: The unique container name of the database. For a site named `my-awesome-site`, this would be `db_my-awesome-site`.
+    - **Username**: The database username you chose during site creation (e.g., `wordpress`).
+    - **Password**: The database password you chose during site creation.
+    - **Database**: The name of the database you want to manage (e.g., `wordpress`).
+
+    Here is an example for a site named `my-awesome-site`:
+
+    ```
+    +-------------------------------------------------+
+    | System      | MySQL                           |
+    | Server      | db_my-awesome-site              |
+    | Username    | wordpress                       |
+    | Password    | •••••••••                       |
+    | Database    | wordpress                       |
+    +-------------------------------------------------+
+    | [ Login ]                                       |
+    +-------------------------------------------------+
+    ```
 
 ## 2. Creating a New Site
 
