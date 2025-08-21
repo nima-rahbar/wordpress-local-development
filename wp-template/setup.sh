@@ -63,6 +63,7 @@ services:
   wp-cli:
     image: wordpress:cli
     container_name: wpcli_${SITE_NAME}
+    user: "${HOST_UID}:${HOST_GID}"
     restart: "no"
     volumes:
       - ./wordpress/:/var/www/html
