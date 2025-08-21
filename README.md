@@ -128,8 +128,11 @@ To run `wp-cli` commands for your site (e.g., to install plugins, manage users, 
 2.  **Execute `wp-cli` commands**:
     ```bash
     docker exec -it wp_your-site-name wp <command>
+    ````
+    Replace `wp_your-site-name` with your actual WordPress container name and `<command>` with the `wp-cli` command you want to run or using it directly
+    ```bash
+    docker-compose run --rm --entrypoint wp wp-cli <command>
     ```
-    Replace `wp_your-site-name` with your actual WordPress container name and `<command>` with the `wp-cli` command you want to run.
 
 ### Example: Install and Activate a Plugin
 
