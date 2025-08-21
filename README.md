@@ -1,6 +1,33 @@
-# How to Add a New WordPress Site
+<div align="center">
+  <h1>🚀 WordPress Local Development Environment 🚀</h1>
+  <p>
+    A flexible and powerful local development environment for managing multiple WordPress sites using Docker, Nginx Proxy Manager, and Adminer.
+  </p>
+  <p>
+    <a href="https://github.com/nima-rahbar/wordpress-local-development/stargazers"><img src="https://img.shields.io/github/stars/nima-rahbar/wordpress-local-development?style=for-the-badge" alt="Stars Badge"/></a>
+    <a href="https://github.com/nima-rahbar/wordpress-local-development/network/members"><img src="https://img.shields.io/github/forks/nima-rahbar/wordpress-local-development?style=for-the-badge" alt="Forks Badge"/></a>
+    <a href="https://github.com/nima-rahbar/wordpress-local-development/issues"><img src="https://img.shields.io/github/issues/nima-rahbar/wordpress-local-development?style=for-the-badge" alt="Issues Badge"/></a>
+    <a href="https://github.com/nima-rahbar/wordpress-local-development/blob/main/LICENSE"><img src="https://img.shields.io/github/license/nima-rahbar/wordpress-local-development?style=for-the-badge" alt="License Badge"/></a>
+  </p>
+</div>
 
-This document will guide you through the process of adding a new WordPress site to this environment.
+---
+
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [First-Time Setup](#1-first-time-setup-nginx-proxy-manager--global-adminer)
+- [Creating a New Site](#2-creating-a-new-site)
+- [Starting the Site](#3-starting-the-site)
+- [Configuring Nginx Proxy Manager](#4-configuring-nginx-proxy-manager)
+- [Running WP-CLI Commands](#5-running-wp-cli-commands)
+- [Managing Sites](#6-managing-sites)
+
+---
+
+## How to Use This Environment
+
+This document will guide you through the process of adding and managing new WordPress sites in this environment.
 
 ## Prerequisites
 
