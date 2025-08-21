@@ -42,10 +42,11 @@ Before you begin, make sure you have the following software installed on your ma
 
 If you are setting up this environment for the first time, you need to start the Nginx Proxy Manager and the Global Adminer.
 
-1.  **Create the proxy network**:
+1.  **Create the required Docker networks**:
 
     ```bash
     docker network create proxy-network
+    docker network create data-network
     ```
 
 2.  **Start the Nginx Proxy Manager**:
