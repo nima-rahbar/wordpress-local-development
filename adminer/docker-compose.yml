@@ -9,7 +9,10 @@ services:
       - "8080:8080"
     networks:
       - proxy-network
+      - data-network
 
 networks:
   proxy-network:
+    external: true
+  data-network:
     external: true
