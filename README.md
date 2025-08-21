@@ -22,6 +22,7 @@
 - [Configuring Nginx Proxy Manager](#4-configuring-nginx-proxy-manager)
 - [Running WP-CLI Commands](#5-running-wp-cli-commands)
 - [Managing Sites](#6-managing-sites)
+- [Managing Memcached](#7-managing-memcached)
 
 ---
 
@@ -127,21 +128,31 @@ This command will create a new directory named `my-awesome-site` with a full Wor
 
 ## 3. Starting the Site
 
-Once you have created the site, you need to start it.
+Once the setup script has generated the configuration files, you can start your site using `docker-compose`.
+
+### Standard Start
+
+For a standard site without any optional services (like Memcached), run the following command:
 
 ```bash
 cd <site-name>
 docker-compose up -d
 ```
 
-### Example
+This will start the default WordPress and database containers.
+
+### Starting with Memcached
+
+If you enabled Memcached during the site creation process, the `memcached` service was added to your `docker-compose.yml` file under a special "profile". Profiles allow for optional services that don't run by default.
+
+To start your site *and* the Memcached container, you must activate the `memcached` profile using the `--profile` flag:
 
 ```bash
-cd my-awesome-site
-docker-compose up -d
+cd <site-name>
+docker-compose --profile memcached up -d
 ```
 
-This will start the WordPress, database, and other services for your site.
+This command starts the default services plus any services matching the `memcached` profile. If you don't use this flag on a Memcached-enabled site, the site may not work correctly as the Memcached container will not be running.
 
 ## 4. Configuring Nginx Proxy Manager
 
@@ -239,3 +250,26 @@ To completely remove a site, including its containers, Docker volumes (which sto
     ```
 
     **Warning**: This action is irreversible and will permanently delete all your site's files and database data.
+
+## 7. Managing Memcached
+
+If you have a site running with Memcached, here’s how you can manage its cache.
+
+### Flushing Cache from a Plugin
+
+Once you have configured a caching plugin (like W3 Total Cache, LiteSpeed Cache, etc.) to use Memcached as its object cache, the plugin's own "Purge All Caches" or "Flush Cache" button in the WordPress admin dashboard will correctly flush the Memcached object cache.
+
+### Flushing Cache from the Command Line
+
+For a more direct approach, you can flush the entire Memcached server from the command line. The simplest and most effective way to do this in a development environment is to restart the Memcached container. Since Memcached is an in-memory cache, restarting it completely clears all cached data.
+
+1.  Navigate to your site's directory:
+    ```bash
+    cd <site-name>
+    ```
+
+2.  Restart the `memcached` service:
+    ```bash
+    docker-compose restart memcached
+    ```
+This command will quickly restart the container, giving you a fresh, empty cache.
