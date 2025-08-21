@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     user: "${HOST_UID}:${HOST_GID}"
     environment:
-      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_HOST: db_${SITE_NAME}
       WORDPRESS_DB_USER: ${DB_USER}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
       WORDPRESS_DB_NAME: ${DB_NAME}
@@ -62,7 +62,7 @@ services:
       - ./wordpress/:/var/www/html
       - ./wp-setup.sh:/wp-setup.sh
     environment:
-      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_HOST: db_${SITE_NAME}
       WORDPRESS_DB_USER: ${DB_USER}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
       WORDPRESS_DB_NAME: ${DB_NAME}
