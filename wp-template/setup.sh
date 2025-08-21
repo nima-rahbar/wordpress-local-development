@@ -36,7 +36,8 @@ services:
       - proxy-network
       - internal-network
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: mariadb:10.6
@@ -49,9 +50,14 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER}", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - internal-network
-      - proxy-network
+      - data-network
 
   # WP-CLI for plugin installation and site setup
   wp-cli:
@@ -97,6 +103,8 @@ cat >> docker-compose.yml << EOL
 
 networks:
   proxy-network:
+    external: true
+  data-network:
     external: true
   internal-network:
     driver: bridge
