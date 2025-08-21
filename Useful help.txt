@@ -1,0 +1,7 @@
+# DB Import
+cat *.sql | docker exec -i <CONTAINER> mysql -u wordpress -pwordpress --database=DB
+
+EX: cat backup_2025-08-20-1456-db.sql | docker exec -i db_wordpress mysql -u wordpress -pwordpress --database=wordpress
+
+# WP_DEBUG
+define('WP_DEBUG', filter_var(getenv_docker('WORDPRESS_DEBUG', false) ?? false, FILTER_VALIDATE_BOOLEAN));
