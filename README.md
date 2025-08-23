@@ -53,7 +53,7 @@ If you are setting up this environment for the first time, you need to start the
 
     ```bash
     cd nginx-proxy-manager
-    docker-compose up -d
+    docker compose up -d
     ```
 
 3.  **Access the Nginx Proxy Manager UI**:
@@ -71,7 +71,7 @@ If you are setting up this environment for the first time, you need to start the
 
     ```bash
     cd adminer
-    docker-compose up -d
+    docker compose up -d
     ```
 
 5.  **Access the Global Adminer UI**:
@@ -129,7 +129,7 @@ This command will create a new directory named `my-awesome-site` with a full Wor
 
 ## 3. Starting the Site
 
-Once the setup script has generated the configuration files, you can start your site using `docker-compose`.
+Once the setup script has generated the configuration files, you can start your site using `docker compose`.
 
 ### Standard Start
 
@@ -137,20 +137,20 @@ For a standard site without any optional services (like Memcached), run the foll
 
 ```bash
 cd <site-name>
-docker-compose up -d
+docker compose up -d
 ```
 
 This will start the default WordPress and database containers.
 
 ### Starting with Memcached
 
-If you enabled Memcached during the site creation process, the `memcached` service was added to your `docker-compose.yml` file under a special "profile". Profiles allow for optional services that don't run by default.
+If you enabled Memcached during the site creation process, the `memcached` service was added to your `docker compose.yml` file under a special "profile". Profiles allow for optional services that don't run by default.
 
 To start your site *and* the Memcached container, you must activate the `memcached` profile using the `--profile` flag:
 
 ```bash
 cd <site-name>
-docker-compose --profile memcached up -d
+docker compose --profile memcached up -d
 ```
 
 This command starts the default services plus any services matching the `memcached` profile. If you don't use this flag on a Memcached-enabled site, the site may not work correctly as the Memcached container will not be running.
@@ -188,23 +188,23 @@ To run `wp-cli` commands for your site (e.g., to install plugins, manage users, 
 
 2.  **Execute `wp-cli` commands**:
 
-    The intended way to run WP-CLI commands is to use `docker-compose run`, which starts a temporary container with the necessary tools.
+    The intended way to run WP-CLI commands is to use `docker compose run`, which starts a temporary container with the necessary tools.
 
     From your site's directory (e.g., `cd my-awesome-site`), run:
     ```bash
-    docker-compose run --rm --entrypoint wp wp-cli <command>
+    docker compose run --rm --entrypoint wp wp-cli <command>
     ```
     Replace `<command>` with the `wp-cli` command and arguments you want to run.
 
 ### Example: Install and Activate a Plugin
 
 ```bash
-docker-compose run --rm --entrypoint wp wp-cli plugin install updraftplus --activate
+docker compose run --rm --entrypoint wp wp-cli plugin install updraftplus --activate
 ```
 
 ## 6. Managing Sites
 
-Once your site is created and running, you can manage its lifecycle using `docker-compose` commands.
+Once your site is created and running, you can manage its lifecycle using `docker compose` commands.
 
 ### Restarting a Site
 
@@ -212,7 +212,7 @@ To restart all services for a specific site:
 
 ```bash
 cd <site-name>
-docker-compose restart
+docker compose restart
 ```
 
 ### Stopping a Site
@@ -221,7 +221,7 @@ To stop all services for a specific site without removing them:
 
 ```bash
 cd <site-name>
-docker-compose stop
+docker compose stop
 ```
 
 ### Deleting a Site (Containers Only)
@@ -230,7 +230,7 @@ To stop and remove only the containers and networks associated with a specific s
 
 ```bash
 cd <site-name>
-docker-compose down
+docker compose down
 ```
 
 ### Fully Deleting a Site (Containers, Volumes, and Files)
@@ -241,7 +241,7 @@ To completely remove a site, including its containers, Docker volumes (which sto
 
     ```bash
     cd <site-name>
-    docker-compose down --volumes
+    docker compose down --volumes
     ```
 
 2.  **Delete the site directory**:
@@ -272,6 +272,6 @@ For a more direct approach, you can flush the entire Memcached server from the c
 
 2.  Restart the `memcached` service:
     ```bash
-    docker-compose restart memcached
+    docker compose restart memcached
     ```
 This command will quickly restart the container, giving you a fresh, empty cache.
